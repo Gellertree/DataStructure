@@ -8,31 +8,29 @@
 
 int main(int argc, char *argv[])
 {
+    List linklist = LinkList_Create();
 
-    LinkList* list = LinkList_Create(10);
+    printf("The length of the List is %d\n",LinkList_Length(linklist));
 
-    int index = 0;
+    LinkList_Insert(&linklist,1,1);
+    LinkList_Insert(&linklist,2,1);
+    LinkList_Insert(&linklist,3,1);
+    LinkList_Insert(&linklist,4,2);
+    LinkList_Insert(&linklist,5,5);
 
-    int i = 0;
-    int j = 1;
-    int k = 2;
-    int x = 3;
-    int y = 4;
-    int z = 5;
+    printf("The length of the List is %d\n",LinkList_Length(linklist));
 
-    LinkList_Insert(list, &i, 0);
-    LinkList_Insert(list, &j, 0);
-    LinkList_Insert(list, &k, 0);
+    printf("The List is\n");
+    LinkList_ShowList(linklist);
 
-    for(index=0; index<LinkList_Length(list); index++)
-    {
-        int* p = (int*)LinkList_Get(list, index);
+    // printf("The 3rd of the List is %d\n",LinkList_Get(linklist,3));
 
-        printf("%d\n", *p);
-    }
+    // printf("The number of the 2 at %d\n",LinkList_Find(linklist,2));
 
-    printf("\n");
+    LinkList_Delete(&linklist,1);
 
+    printf("After delete,the List is\n");
+    LinkList_ShowList(linklist);
     return 0;
 }
 

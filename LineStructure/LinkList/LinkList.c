@@ -7,129 +7,128 @@
 #include <malloc.h>
 #include "LinkList.h"
 
-typedef struct _tag_LinkList
-{
-    LinkListNode head;
-    int length;
-}TLinkList;
-
-LinkList* LinkList_Create()
-{
-    //动态生成一个表头结点
-    TLinkList* ret = (TLinkList*)malloc(sizeof(TLinkList));
-    //判断是否创建成功
-    if(ret != NULL)
-    {
-        ret->length = 0;
-        ret->head.next = NULL;
-    }
-    //返回创建的链表
-    return ret;
+List LinkList_Create(){
+    List LinkList;
+    LinkList = (List)malloc(sizeof(List));
+    LinkList->Next = NULL;
+    return LinkList;
 }
 
-void LinkList_Destroy(LinkList* list)
-{
+void LinkList_Destroy(List list){
     free(list);
+    return ;
 }
 
-void LinkList_Clear(LinkList* list)
-{
-    //进行强制转换
-    TLinkList* slist = (TLinkList*)list;
-
-    //长度设置为0，头结点指向空
-    if(slist != NULL)
+void LinkList_Clear(List list){
+    List p = list->Next;
+    while (p)
     {
-        slist->length = 0;
-        slist->head.next = NULL;
+        free(p);
     }
 }
 
-
-int LinkList_Length(LinkList* list)
-{
-    //进行强制转换
-    TLinkList* slist = (TLinkList*)list;
-    int ret = -1;
-    //长度赋给变量然后返回
-    if(slist != NULL)
-    {
-        ret = slist->length;
-    }
-
-    return ret;
+int LinkList_Length(List list){
+  int length = 0;
+  List p = list->Next;
+  while (p)
+  {
+      length++;
+      p = p->Next;
+  }
+  return  length;
 }
 
-
-int LinkList_Insert(LinkList* list, LinkListNode* node, int pos)
-{
-    //进行强制转换
-    TLinkList* slist = (TLinkList*)list;
-    //进行条件检测
-    int ret = (slist != NULL) && (pos >= 0) && (node != NULL);
-
-    if(ret)
+int LinkList_Insert(List *list, ElementType node, int pos){
+    if (pos == 1)
     {
-        //定义一个插入指针指向头结点
-        LinkListNode* current = (LinkListNode*)slist;
-        //移动指针到需要插入的地方
-        for(int i = 0; (i < pos) && (current->next != NULL); i++)
+        List temp = (List)malloc(sizeof(List));
+        temp->Data = node;
+        temp->Next = *list;
+        *list = temp;
+        return 1;
+       
+    }
+    if (pos < 1 || pos > LinkList_Length(*list)+1)
+    {
+        printf("this position is wrong!\n");
+        return -1;
+    }
+    if (pos > 1 || pos < LinkList_Length(*list)+2)
+    {
+        List p = *list;
+        List temp = (List)malloc(sizeof(List));
+        temp->Data = node;
+        for (int i = 0; i < pos-2; i++)
         {
-            current = current->next;
+            p = p->Next;
         }
-        //插入节点
-        node->next = current->next;
-        current->next = node;
-        //链表长度加一
-        slist->length++;
+        temp->Next = p->Next;
+        p->Next = temp;
+        return 1;
     }
-    return ret;
 }
 
-LinkListNode* LinkList_Get(LinkList* list, int pos)
-{
-    //进行强制转换
-    TLinkList* slist = (TLinkList*)list;
-    LinkListNode* ret = NULL;
-    //进行条件检测
-   if((slist != NULL) && (pos >= 0) && (pos < slist->length))
+void LinkList_ShowList(List list){
+    List p = list;
+    int i = 0;
+    while (p->Next)
     {
-        //定义一个插入指针指向头结点
-        LinkListNode* current = (LinkListNode*)slist;
-        //移动指针到指定的地方
-        for(int i = 0; (i < pos) && (current->next != NULL); i++)
-        {
-            current = current->next;
-        }
-        //把对应的节点地址赋给ret
-        ret = current->next;
+        printf("List[%d] = %d\n", i + 1,p->Data);
+        p = p->Next;
+        i++;
     }
-    return ret;
 }
 
-LinkListNode* LinkList_Delete(LinkList* list, int pos)
-{
-    //进行强制转换
-    TLinkList* slist = (TLinkList*)list;
-    LinkListNode* ret = NULL;
-    //进行条件检测
-    if((slist != NULL) && (pos >= 0) && (pos < slist->length))
+ElementType LinkList_Get(List list, int pos){
+    if (pos < 1 || pos > LinkList_Length(list) + 1)
     {
-        //定义一个插入指针指向头结点
-        LinkListNode* current = (LinkListNode*)slist;
-        //移动指针到指定的地方
-        for(int i = 0; (i < pos) && (current->next != NULL); i++)
-        {
-            current = current->next;
-        }
-        //进行删除操作
-        ret = current->next;
-        current->next = ret->next;
-
-        //链表长度减一
-        slist->length--;
+        printf("the position is wrong!\n");
+        return 0;
     }
-    return ret;
+    List p = list;
+    for (int i = 0; i < pos-1; i++)
+    {
+        p = p->Next;
+    }
+    return p->Data;
 }
 
+int LinkList_Find(List list, ElementType node){
+    int i = 0;
+    List p = list;
+    while (p->Data != node && p->Next)
+    {
+        p = p->Next;
+        i++;
+    }
+    if(p->Next){
+        return i+1;
+    }else
+    {
+        printf("Cann't fint it !\n");
+        return -1;
+    }
+    
+}
+
+void LinkList_Delete(List* list, int pos){
+    List p = *list;
+    if (pos < 1 || pos > LinkList_Length(*list))
+    {
+        printf("The poistion is wrong!\n");
+        return;
+    }else if (pos == 1)
+    {
+        *list = p->Next;
+        free(p);
+    }else
+    {
+        for (int i = 0; i < pos-2; i++){
+            p = p->Next;
+        }
+        List temp = p->Next;
+        p->Next = temp->Next;
+        free(temp);
+    }
+}
 

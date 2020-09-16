@@ -64,9 +64,11 @@ ElementType SeqList_Get(List list, int pos)
     if (pos < 1 || pos > list->Last + 1)
     {
         printf("the position is wrong!\n");
+	return -1;
     }
-    
-    return list->Data[pos-1];
+    else{
+    	return list->Data[pos-1];
+    }
 }
 
 ElementType SeqList_Find(List list,ElementType node)

@@ -3,23 +3,7 @@
         {
             "type": "shell",
             "label": "LinkList",
-            "command": "/opt/rh/devtoolset-8/root/usr/bin/gcc",
-            "args": [
-                "-g",
-                "${file}",
-                "-o",
-                "${fileDirname}/${fileBasenameNoExtension}"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}"
-            },
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "command": "make",
         }
     ],
     "version": "2.0.0"

@@ -5,26 +5,29 @@
 #ifndef LIST_LINKLIST_H
 #define LIST_LINKLIST_H
 
-typedef void LinkList;
-typedef struct _tag_LinkListNode LinkListNode;
+typedef int  ElementType;
 
-struct _tag_LinkListNode
-{
-    LinkListNode* next;
+typedef struct LNode *List; struct LNode{
+	ElementType Data;
+	List Next; 
 };
 
-LinkList* LinkList_Create();
+List LinkList_Create();
 
-void LinkList_Destroy(LinkList* list);
+void LinkList_Destroy(List list);
 
-void LinkList_Clear(LinkList* list);
+void LinkList_Clear(List list);
 
-int LinkList_Length(LinkList* list);
+void LinkList_ShowList(List list);
 
-int LinkList_Insert(LinkList* list, LinkListNode* node, int pos);
+int LinkList_Length(List list);
 
-LinkListNode* LinkList_Get(LinkList* list, int pos);
+int LinkList_Insert(List *list, ElementType node, int pos);
 
-LinkListNode* LinkList_Delete(LinkList* list, int pos);
+ElementType LinkList_Get(List list, int pos);
+
+int LinkList_Find(List list, ElementType node);
+
+void LinkList_Delete(List* list, int pos);
 
 #endif //LIST_LINKLIST_H
