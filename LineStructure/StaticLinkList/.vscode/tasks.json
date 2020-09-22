@@ -1,0 +1,10 @@
+{
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "StaticLinkList",
+            "command": "make"
+        }
+
+    ]
+}
